@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat WebSocket</title>
+    
+    <link rel="stylesheet" href="css/styles.css">
+</head> 
+<body>
+    <h1>Chat</h1>
+    
+    <!-- Indicador de estado de conexión -->
+    <div class="connection-status disconnected" id="connectionStatus">
+        Desconectado
+    </div>
+    
+    <section id="chat">
+        <!-- Área donde aparecerán los mensajes -->
+       <div id="messages">
+        <!-- Los mensajes se agregarán como <div class="message"> -->
+    </div>
+        
+        <!-- Formulario para enviar mensajes -->
+        <form id="messageForm">
+            <input 
+                type="text" 
+                id="messageInput" 
+                placeholder="Escribe tu mensaje..." 
+                maxlength="500"
+                autocomplete="off"
+                required
+            >
+            <button type="submit" id="sendBtn">
+                Enviar
+            </button>
+        </form>
+    </section>
+
+
+
+    <script type="module" src="js/script.js"></script>
+</body>
+</html>

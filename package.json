@@ -1,0 +1,27 @@
+{
+  "name": "realtime-chat",
+  "version": "1.0.0",
+  "description": "A simple real-time chat application using Node.js and Express.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --watch ./server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoacoGDev/realtime-chat.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/JoacoGDev/realtime-chat/issues"
+  },
+  "homepage": "https://github.com/JoacoGDev/realtime-chat#readme",
+  "dependencies": {
+    "express": "5.1.0",
+    "morgan": "1.10.1",
+    "socket.io": "4.8.1"
+  }
+}
