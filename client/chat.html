@@ -3,30 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat WebSocket</title>
-    
+    <title>Chat en Tiempo Real</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head> 
 <body>
-    <h1>Chat</h1>
-    
-    <!-- Indicador de estado de conexión -->
     <div class="connection-status disconnected" id="connectionStatus">
         Desconectado
     </div>
     
+    <h1>Chat en Tiempo Real</h1>
+    
     <section id="chat">
-        <!-- Área donde aparecerán los mensajes -->
-        <ul id="messages">
-            <!-- Los mensajes se agregarán aquí dinámicamente -->   
-        </ul>
+        <div id="messages">
+            <!-- Los mensajes se agregarán aquí dinámicamente -->
+        </div>
         
-        <!-- Formulario para enviar mensajes -->
         <form id="messageForm">
             <input 
                 type="text" 
                 id="messageInput" 
-                placeholder="Escribe tu mensaje..." 
+                placeholder="Escribe un mensaje..." 
                 maxlength="500"
                 autocomplete="off"
                 required
@@ -37,7 +34,9 @@
         </form>
     </section>
 
-
+    <button id="logoutBtn">
+        Cerrar Sesión
+    </button>
 
     <script type="module" src="js/chat.js"></script>
 </body>

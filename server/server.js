@@ -7,7 +7,7 @@ import socketHandler from './sockets.js';
 import { Server } from 'socket.io';
 import { createServer } from 'node:http';
 import dotenv from 'dotenv';
-import authRouter from './auth.js';
+import authRouter from './routes/authRoutes.js';
 import { init } from './initDb.js';
 
 dotenv.config();
@@ -30,8 +30,9 @@ app.use(express.static(path.join(__dirname, '..', 'client')));
 
 // Redirigir a index por defecto
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'client', 'chat.html'));
+    res.sendFile(path.join(__dirname, '..', 'client', 'login.html'));
 });
+
 
 
 

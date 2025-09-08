@@ -1,67 +1,81 @@
 import { io } from 'https://cdn.socket.io/4.5.4/socket.io.esm.min.js';
 
-
-// Verificar si el usuario está autenticado
+// Si no hay token, redirigimos al login
 const token = localStorage.getItem('token');
-if (!token) {
-  // Si no hay token -> redirige a login
-  window.location.href = '/login.html';
+const username = localStorage.getItem('username');
+
+if (!token || !username) {
+    window.location.href = '/login.html';
 }
 
-const formatDate = (timestamp) => {
-  // Si viene como número (segundos), lo pasamos a milisegundos
-  const date = new Date(typeof timestamp === "number" ? timestamp * 1000 : timestamp);
+// Estado de conexión
+const connectionStatus = document.getElementById('connectionStatus');
 
-  return date.toLocaleTimeString([], { 
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false
-  });
+const updateConnectionStatus = (connected) => {
+    connectionStatus.textContent = connected ? 'Conectado' : 'Desconectado';
+    connectionStatus.className = `connection-status ${connected ? 'connected' : 'disconnected'}`;
 };
 
-const getUsername = async () => {
-    const username = localStorage.getItem('username'); 
-
-    if (username) {
-        console.log(`User existed ${username}`);
-        return username;
-    }
-  // Pedimos un username aleatorio a la API
-    const res = await fetch('https://randomuser.me/api/');
-    const data = await res.json();
-
-    // Extraemos el username correctamente
-    const randomUsername = data.results[0].login.username;
+const formatDate = (timestamp) => {
+    const date = new Date(typeof timestamp === "number" ? timestamp * 1000 : timestamp);
+    return date.toLocaleTimeString([], { 
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
+    });
+};
 
 
-    localStorage.setItem('username', randomUsername);
-    return randomUsername;
-
-}
-
-//Connect to server
-const socket = io({
+// Conexión al servidor con username y token en auth
+const socket = io(currentConfig.socketUrl, {
     auth: {
-        username: await getUsername(),
-        serverOffset: 0 
-        
+        username,
+        token,
+        serverOffset: 0
     }
 });
 
 const form = document.querySelector('#messageForm');
 const input = document.querySelector('#messageInput');
 const messages = document.querySelector('#messages');
+const logoutBtn = document.querySelector('#logoutBtn');
 
-socket.on('chat message', ({content, created_at, serverOffset, username}) => {
+// Eventos de conexión
+socket.on('connect', () => {
+    updateConnectionStatus(true);
+    console.log('Conectado al servidor');
+});
 
-   
-    const item = `<li><small>[${formatDate(created_at)}]</small> <p>${content}</p> 
-    <small>${username}</small>
-    </li>`;
-    messages.insertAdjacentHTML('beforeend', item);
-    messages.scrollTop = messages.scrollHeight; 
+socket.on('disconnect', () => {
+    updateConnectionStatus(false);
+    console.log('Desconectado del servidor');
+});
+
+socket.on('connect_error', (error) => {
+    updateConnectionStatus(false);
+    if (error.message.includes('Authentication error')) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        window.location.href = '/login.html';
+    }
+});
+
+// Eventos de mensajes
+socket.on('chat message', ({content, created_at, serverOffset, username: msgUsername}) => {
+    const isOwnMessage = username === msgUsername;
+    
+    const messageHtml = `
+        <div class="message ${isOwnMessage ? 'own' : ''}">
+            ${!isOwnMessage ? `<div class="message-header">${msgUsername}</div>` : ''}
+            <div class="message-text">${content}</div>
+            <div class="message-time">${formatDate(created_at)}</div>
+        </div>
+    `;
+    
+    messages.insertAdjacentHTML('beforeend', messageHtml);
+    messages.scrollTop = messages.scrollHeight;
     socket.auth.serverOffset = serverOffset;
-})
+});
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -71,4 +85,14 @@ form.addEventListener('submit', (e) => {
         input.value = '';
     }
 });
+
+// Logout (podés agregar un botón con id logoutBtn en chat.html)
+
+
+    logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        window.location.href = '/login.html';
+    });
+
 

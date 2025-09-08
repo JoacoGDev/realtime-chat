@@ -1,27 +1,19 @@
 import express from 'express';
-import { registerUser, authenticateUser } from './users.js';
-import jwt from 'jsonwebtoken';
+import { registerUser, authenticateUser } from '../users.js';
+import { validateRegister, validateLogin, validate } from '../validators/authValidators.js';
+import { generateToken } from '../config/jwt.js';
 
 const router = express.Router();
-const JWT_SIGNATURE = process.env.JWT_SECRET || "my_secret_key";
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN ||'1h';
 
 //Registro
 
-router.post('/register', async (req, res) => {
+router.post('/register', validateRegister, validate, async (req, res) => {
     const {username, password} = req.body;
 
     try {
         const user = await registerUser(username, password);
 
-        const token = jwt.sign(
-            {
-                id: user.id,
-                username: user.username
-            },
-            JWT_SIGNATURE,
-            {expiresIn: JWT_EXPIRES_IN}
-        );
+        const token = generateToken(user);
 
         res.status(201).json({ user: {id: user.id, username: user.username}, token });
     } catch (err) {
@@ -36,7 +28,7 @@ router.post('/register', async (req, res) => {
 
 //Login
 
-router.post('/login', async (req, res) => {
+router.post('/login', validateLogin, validate, async (req, res) => {
     const {username, password} = req.body;
 
     try {
@@ -46,13 +38,7 @@ router.post('/login', async (req, res) => {
         }
 
         //Generar token JWT en login
-        const token = jwt.sign(
-            {
-                id: user.id,
-                username: user.username
-            }, JWT_SIGNATURE,
-            {expiresIn: JWT_EXPIRES_IN}
-        );  
+        const token = generateToken(user);
 
         res.json({user: {id: user.id, username: user.username}, token});
     } catch( err) {

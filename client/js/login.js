@@ -26,7 +26,7 @@ form.addEventListener("submit", async (e) => {
     localStorage.setItem("username", data.user.username);
 
     // Redirigir al chat
-    window.location.href = "/";
+    window.location.href = "/chat.html";
   } catch (err) {
     errorEl.textContent = "Error de conexión con el servidor";
     console.error(err);

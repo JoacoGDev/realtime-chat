@@ -1,8 +1,31 @@
 import {addMessage, getPendingMessages} from "./db.js";
+import { verifyToken } from './config/jwt.js';
 
 export default function socketHandler(io) {
+    io.use(async (socket, next) => {
+        const token = socket.handshake.auth.token;
+        
+        try {
+            if (!token) {
+                throw new Error('Authentication error: Token missing');
+            }
+
+            const decoded = await verifyToken(token);
+            socket.user = decoded;
+            
+            // Guardar el token en el socket para futuras verificaciones
+            socket.token = token;
+            
+            next();
+        } catch (err) {
+            const error = new Error(err.message || 'Authentication error');
+            error.data = { type: 'auth_error' }; // Útil para el cliente
+            next(error);
+        }
+    });
+
     io.on('connection', async (socket) => {
-        console.log('Se ha conectado un usuario!', socket.id);
+        console.log(`User connected: ${socket.user.username}`);
 
         socket.on('disconnect', () => {
             console.log('a user has disconnected');
