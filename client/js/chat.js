@@ -26,8 +26,13 @@ const formatDate = (timestamp) => {
 };
 
 
+// Configuración de la URL del servidor
+const socketUrl = window.location.hostname === 'localhost' 
+    ? 'http://localhost:3000'
+    : window.location.origin;
+
 // Conexión al servidor con username y token en auth
-const socket = io(currentConfig.socketUrl, {
+const socket = io(socketUrl, {
     auth: {
         username,
         token,
