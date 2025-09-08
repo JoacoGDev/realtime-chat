@@ -1,13 +1,22 @@
 import { io } from 'https://cdn.socket.io/4.5.4/socket.io.esm.min.js';
 
-const formatDate = (timestamp) => {
 
-    const date = new Date(timestamp.replace(' ', 'T') + 'Z'); // fuerza UTC
-    return date.toLocaleTimeString([], { 
-        hour: '2-digit', 
-        minute: '2-digit',
-        hour12: false   // 24 horas, sin AM/PM
-    });
+// Verificar si el usuario está autenticado
+const token = localStorage.getItem('token');
+if (!token) {
+  // Si no hay token -> redirige a login
+  window.location.href = '/login.html';
+}
+
+const formatDate = (timestamp) => {
+  // Si viene como número (segundos), lo pasamos a milisegundos
+  const date = new Date(typeof timestamp === "number" ? timestamp * 1000 : timestamp);
+
+  return date.toLocaleTimeString([], { 
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  });
 };
 
 const getUsername = async () => {
