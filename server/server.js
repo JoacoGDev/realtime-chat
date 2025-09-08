@@ -12,6 +12,15 @@ import { init } from './initDb.js';
 
 dotenv.config();
 
+// Verificar variables de entorno críticas
+const requiredEnvVars = ['DB_TOKEN', 'DB_URL', 'JWT_SECRET'];
+for (const envVar of requiredEnvVars) {
+    if (!process.env[envVar]) {
+        console.error(`Error: ${envVar} is not set in environment variables`);
+        process.exit(1);
+    }
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -46,6 +55,13 @@ socketHandler(io);
 // Inicializar base de datos y luego levantar el servidor
 (async () => {
     try {
+        console.log('Environment variables:', {
+            hasDbToken: !!process.env.DB_TOKEN,
+            hasDbUrl: !!process.env.DB_URL,
+            hasJwtSecret: !!process.env.JWT_SECRET,
+            nodeEnv: process.env.NODE_ENV
+        });
+        
         await init(); // Crear tablas si no existen
         server.listen(port, () => {
             console.log(`Server running at http://localhost:${port}`);

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node --watch ./server/server.js",
-    "start": "node ./server/server.js",
+    "start": "node -r dotenv/config ./server/server.js",
     "build": "npm install --production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
