@@ -1,6 +1,6 @@
 import rateLimit from 'express-rate-limit';
 
-const authLimiter = rateLimit({
+export const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutos
     max: 5, // 5 intentos
     message: {
@@ -20,4 +20,3 @@ const chatLimiter = rateLimit({
     }
 });
 
-module.exports = { authLimiter, chatLimiter };

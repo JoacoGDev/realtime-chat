@@ -9,6 +9,7 @@ import { createServer } from 'node:http';
 import dotenv from 'dotenv';
 import authRouter from './routes/authRoutes.js';
 import { init } from './initDb.js';
+import { authLimiter } from './middleware/rateLimiter.js';
 
 dotenv.config();
 
@@ -27,12 +28,11 @@ const __dirname = dirname(__filename);
 const app = express();
 const port = process.env.PORT ?? 3000;
 
-// Middleware
-app.use(cors());
+//middleware
 app.use(logger('dev'));
 app.use(express.json()); // permite leer JSON en req.body
 
-// Rutas
+
 // Rutas de API con Rate Limiting
 app.use('/api/auth', authLimiter, authRouter);
 

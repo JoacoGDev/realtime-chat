@@ -2,7 +2,7 @@ import express from 'express';
 import { registerUser, authenticateUser } from '../users.js';
 import { validateRegister, validateLogin, validate } from '../validators/authValidators.js';
 import { generateToken } from '../config/jwt.js';
-import { authLimiter } from '../middleware/reateLimiter.js';
+import { authLimiter } from '../middleware/rateLimiter.js';
 
 const router = express.Router();
 
