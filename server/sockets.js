@@ -2,73 +2,116 @@ import {addMessage, getPendingMessages} from "./db.js";
 import { verifyToken } from './config/jwt.js';
 
 export default function socketHandler(io) {
+    // Mapa para trackear intentos de reconexión por usuario
+    const reconnectAttempts = new Map();
+    const MAX_RECONNECT_ATTEMPTS = 5;
+
     io.use(async (socket, next) => {
         const token = socket.handshake.auth.token;
         
         try {
             if (!token) {
-                throw new Error('Authentication error: Token missing');
+                throw new Error('Token no proporcionado');
             }
 
             const decoded = await verifyToken(token);
             socket.user = decoded;
-            
-            // Guardar el token en el socket para futuras verificaciones
             socket.token = token;
+
+            // Resetear intentos de reconexión al conectarse exitosamente
+            reconnectAttempts.delete(decoded.username);
             
             next();
         } catch (err) {
-            const error = new Error(err.message || 'Authentication error');
-            error.data = { type: 'auth_error' }; // Útil para el cliente
+            const error = new Error('Error de autenticación');
+            error.data = { 
+                type: 'auth_error',
+                message: err.message 
+            };
             next(error);
         }
     });
 
     io.on('connection', async (socket) => {
-        console.log(`User connected: ${socket.user.username}`);
+        console.log(`Usuario conectado: ${socket.user.username}`);
 
-        socket.on('disconnect', () => {
-            console.log('a user has disconnected');
+        // Manejo de desconexión
+        socket.on('disconnect', (reason) => {
+            const username = socket.user.username;
+            console.log(`Usuario desconectado (${username}): ${reason}`);
+
+            // Incrementar intentos de reconexión
+            const attempts = reconnectAttempts.get(username) || 0;
+            if (attempts < MAX_RECONNECT_ATTEMPTS) {
+                reconnectAttempts.set(username, attempts + 1);
+            }
         });
 
-
-        // Enviar mensajes pendientes si el socket no es recuperado
+        // Recuperación de mensajes
         if (!socket.recovered) {
             try {
-                const pending = await getPendingMessages(socket.handshake.auth.serverOffset ?? 0);
+                const serverOffset = socket.handshake.auth.serverOffset || 0;
+                const pending = await getPendingMessages(serverOffset);
 
-                pending.forEach(row => {
+                for (const message of pending) {
                     socket.emit('chat message', {
-                        id: row.id,
-                        content: row.content,
-                        created_at: row.created_at,
-                        offset: row.offset,
-                        username: row.username
+                        ...message,
+                        recovered: true
                     });
-                });
+                }
             } catch (error) {
-                console.error("Error al obtener mensajes pendientes:", error);
-                return;
+                socket.emit('error', {
+                    type: 'recovery_error',
+                    message: 'Error al recuperar mensajes'
+                });
             }
         }
 
+        // Manejo de mensajes
         socket.on('chat message', async (msg) => {
-               
-                //Obtenemos el username del socket handshake
-                const username = socket.handshake.auth.username ?? 'anonymous';
-                let insertedMessage;
+            const username = socket.user.username;
+            
+            // Validar mensaje
+            if (typeof msg !== 'string' || msg.length > 500) {
+                socket.emit('error', {
+                    type: 'validation_error',
+                    message: 'Mensaje inválido'
+                });
+                return;
+            }
 
-                try {
-                  
-                    insertedMessage = await addMessage(username, msg);
-                    }  catch (error) {
-                    console.error("Error al guardar mensaje:", error);
-                    return;
-                }
+            try {
+                const sanitizedMsg = msg.trim()
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;');
 
-                // Emitimos el mensaje con UUID y offset al cliente
-                io.emit('chat message', insertedMessage);
-            });
-        
+                const insertedMessage = await addMessage(username, sanitizedMsg);
+                
+                io.emit('chat message', {
+                    ...insertedMessage,
+                    recovered: false
+                });
+            } catch (error) {
+                console.error("Error al guardar mensaje:", error);
+                socket.emit('error', {
+                    type: 'database_error',
+                    message: 'Error al enviar mensaje'
+                });
+            }
+        });
+
+        // Manejo de reconexión
+        socket.on('reconnect_attempt', () => {
+            const username = socket.user.username;
+            const attempts = reconnectAttempts.get(username) || 0;
+
+            if (attempts >= MAX_RECONNECT_ATTEMPTS) {
+                socket.emit('error', {
+                    type: 'reconnect_error',
+                    message: 'Demasiados intentos de reconexión'
+                });
+                reconnectAttempts.delete(username);
+            }
+        });
     });
 }

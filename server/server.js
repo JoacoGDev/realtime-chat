@@ -28,11 +28,13 @@ const app = express();
 const port = process.env.PORT ?? 3000;
 
 // Middleware
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json()); // permite leer JSON en req.body
 
 // Rutas
-app.use('/auth', authRouter);
+// Rutas de API con Rate Limiting
+app.use('/api/auth', authLimiter, authRouter);
 
 // Serve static files from the client directory
 app.use(express.static(path.join(__dirname, '..', 'client')));
@@ -54,14 +56,7 @@ socketHandler(io);
 
 // Inicializar base de datos y luego levantar el servidor
 (async () => {
-    try {
-        console.log('Environment variables:', {
-            hasDbToken: !!process.env.DB_TOKEN,
-            hasDbUrl: !!process.env.DB_URL,
-            hasJwtSecret: !!process.env.JWT_SECRET,
-            nodeEnv: process.env.NODE_ENV
-        });
-        
+    try {   
         await init(); // Crear tablas si no existen
         server.listen(port, () => {
             console.log(`Server running at http://localhost:${port}`);

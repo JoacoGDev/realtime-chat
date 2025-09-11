@@ -2,12 +2,13 @@ import express from 'express';
 import { registerUser, authenticateUser } from '../users.js';
 import { validateRegister, validateLogin, validate } from '../validators/authValidators.js';
 import { generateToken } from '../config/jwt.js';
+import { authLimiter } from '../middleware/reateLimiter.js';
 
 const router = express.Router();
 
 //Registro
 
-router.post('/register', validateRegister, validate, async (req, res) => {
+router.post('/register', authLimiter ,validateRegister, validate, async (req, res) => {
     const {username, password} = req.body;
 
     try {
@@ -28,7 +29,7 @@ router.post('/register', validateRegister, validate, async (req, res) => {
 
 //Login
 
-router.post('/login', validateLogin, validate, async (req, res) => {
+router.post('/login', authLimiter, validateLogin, validate, async (req, res) => {
     const {username, password} = req.body;
 
     try {

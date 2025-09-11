@@ -6,7 +6,7 @@ dotenv.config();
 
 //Conexión a la base de datos
 const db = createClient({
-    url: "libsql://amazed-tara-joacogdev.aws-us-east-1.turso.io",
+    url: process.env.DB_URL,
     authToken: process.env.DB_TOKEN
 })
 
