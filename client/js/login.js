@@ -1,5 +1,5 @@
-const form = document.getElementById("loginForm");
-const errorEl = document.getElementById("error");
+const form = document.querySelector("#loginForm");
+const error = document.querySelector("#error");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -8,7 +8,7 @@ form.addEventListener("submit", async (e) => {
   const password = document.getElementById("password").value;
 
   try {
-    const res = await fetch("/auth/login", {
+    const res = await fetch('/api/auth/login', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
@@ -17,7 +17,7 @@ form.addEventListener("submit", async (e) => {
     const data = await res.json();
 
     if (!res.ok) {
-      errorEl.textContent = data.error || "Error al iniciar sesión";
+      error.textContent = data.error || "Error al iniciar sesión";
       return;
     }
 
@@ -28,7 +28,7 @@ form.addEventListener("submit", async (e) => {
     // Redirigir al chat
     window.location.href = "/chat.html";
   } catch (err) {
-    errorEl.textContent = "Error de conexión con el servidor";
+    error.textContent = "Error de conexión con el servidor";
     console.error(err);
   }
 });
