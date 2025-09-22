@@ -2,7 +2,7 @@ import rateLimit from 'express-rate-limit';
 
 export const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutos
-    max: 5, // 5 intentos
+    max: 15, // 15 intentos
     message: {
         status: 'error',
         message: 'Demasiados intentos. Por favor, espere 15 minutos.'
@@ -11,12 +11,4 @@ export const authLimiter = rateLimit({
     legacyHeaders: false
 });
 
-const chatLimiter = rateLimit({
-    windowMs: 60 * 1000, // 1 minuto
-    max: 30, // 30 mensajes
-    message: {
-        status: 'error',
-        message: 'Has enviado demasiados mensajes. Espera un momento.'
-    }
-});
 
