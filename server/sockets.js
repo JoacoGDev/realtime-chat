@@ -1,5 +1,6 @@
 import {addMessage, getPendingMessages} from "./db.js";
 import { verifyToken } from './config/jwt.js';
+import sanitizeHtml from 'sanitize-html';
 
 export default function socketHandler(io) {
     // Mapa para trackear intentos de reconexión por usuario
@@ -81,9 +82,10 @@ export default function socketHandler(io) {
             }
 
             try {
-                const sanitizedMsg = msg.trim()
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;');
+                const sanitizedMsg = sanitizeHtml(msg.trim(), {
+                    allowedTags: [],
+                    allowedAttributes: {}
+                });
 
                 const insertedMessage = await addMessage(username, sanitizedMsg);
                 

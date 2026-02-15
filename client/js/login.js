@@ -17,7 +17,8 @@ form.addEventListener("submit", async (e) => {
     const data = await res.json();
 
     if (!res.ok) {
-      error.textContent = data.error || "Error al iniciar sesión";
+      error.textContent = data.error || (data.errors ? data.errors.map(e => e.message).join(' | ') : "Error al iniciar sesión");
+      error.style.display = 'block'; // Mostrar el mensaje
       return;
     }
 

@@ -4,9 +4,9 @@ export const JWT_CONFIG = {
     secret: process.env.JWT_SECRET,
     options: {
         expiresIn: process.env.JWT_EXPIRES_IN || '1h',
-        algorithm: 'HS256', // Especificar el algoritmo
-        issuer: 'realtime-chat', // Identificador de la aplicación
-        audience: 'chat-users', // Audiencia prevista
+        algorithm: 'HS256', 
+        issuer: 'realtime-chat', 
+        audience: 'chat-users', 
     }
 };
 
