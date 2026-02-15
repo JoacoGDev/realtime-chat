@@ -1,6 +1,6 @@
 # Realtime Chat
 
-Aplicación de chat en tiempo real construida con Node.js, Express y Socket.io. Permite que los usuarios se registren, inicien sesión y conversen en un entorno con autenticación JWT y persistencia en base de datos SQL (libSQL/Turso compatible con SQLite). fileciteturn0file0
+Aplicación de chat en tiempo real construida con Node.js, Express y Socket.io. Permite que los usuarios se registren, inicien sesión y conversen en un entorno con autenticación JWT y persistencia en base de datos SQL (libSQL/Turso compatible con SQLite).
     
 ## Tecnologías
 
