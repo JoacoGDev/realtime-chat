@@ -1,7 +1,18 @@
 # Realtime Chat
 
 Aplicación de chat en tiempo real construida con Node.js, Express y Socket.io. Permite que los usuarios se registren, inicien sesión y conversen en un entorno con autenticación JWT y persistencia en base de datos SQL (libSQL/Turso compatible con SQLite).
-    
+
+## Capturas de pantalla
+
+### Chat en tiempo real
+<img src="docs/images/chat.png" alt="Pantalla de chat en tiempo real" width="1000" />
+
+### Inicio de sesión
+<img src="docs/images/login.png" alt="Pantalla de inicio de sesión" width="520" />
+
+### Registro de usuario
+<img src="docs/images/register.png" alt="Pantalla de registro de usuario" width="520" />
+
 ## Tecnologías
 
 ![Node.js](https://img.shields.io/badge/Node.js-LTS-339933?logo=node.js&logoColor=white)
@@ -55,6 +66,11 @@ realtime-chat/
     ├── middleware/
     ├── validators/
     └── config/
+docs/
+└── images/
+    ├── chat.png
+    ├── login.png
+    └── register.png
 ```
 
 ## Requisitos
@@ -82,18 +98,17 @@ npm install
 
 ### 3) Configurar variables de entorno
 
-Copiá el archivo de ejemplo y completá los valores según tu entorno:
+Copiar el archivo de ejemplo y completar los valores según tu entorno:
 
 ```bash
 cp env.example .env
 ```
 
-Abrí `.env` y configurá los parámetros requeridos (por ejemplo, secreto JWT y conexión a la base de datos).  
-Referencia: el archivo `env.example` define qué variables necesita el proyecto.
+Abrir `.env` y configurar los parámetros requeridos (por ejemplo, secreto JWT y conexión a la base de datos). El archivo `env.example` define qué variables necesita el proyecto.
 
 ### 4) Inicializar la base de datos (si aplica)
 
-El proyecto incluye un script de inicialización en `server/initDb.js`. Si es tu primera vez corriendo el proyecto o estás usando una base nueva, ejecutalo una vez:
+El proyecto incluye un script de inicialización en `server/initDb.js`. Si es tu primera vez corriendo el proyecto o estás usando una base nueva, ejecutarlo una vez:
 
 ```bash
 node server/initDb.js
@@ -123,14 +138,14 @@ http://localhost:3000
 
 ## Cómo probarlo
 
-1. Con el servidor corriendo, abrí en el navegador:
+1. Con el servidor corriendo, abrir en el navegador:
    - `http://localhost:3000/register.html` para crear una cuenta.
    - `http://localhost:3000/login.html` para iniciar sesión.
    - `http://localhost:3000/chat.html` para entrar al chat (requiere autenticación).
 
-2. Abrí dos ventanas (o un navegador en modo incógnito) con usuarios distintos para validar el chat en tiempo real.
+2. Abrir dos ventanas (o un navegador en modo incógnito) con usuarios distintos para validar el chat en tiempo real.
 
-3. Probá reconectar (recargar la página) para verificar la recuperación de mensajes.
+3. Recargar la página para verificar la recuperación de mensajes.
 
 ## Seguridad (resumen)
 
@@ -151,8 +166,18 @@ Los scripts disponibles se definen en `package.json`. Habitualmente:
 
 - El cliente se conecta enviando token JWT y username.
 - El servidor valida el token al conectar.
-- Los mensajes se envían/reciben en tiempo real.
+- Los mensajes se envían y reciben en tiempo real.
 - Se persisten con un offset incremental para recuperar mensajes tras reconexión.
+
+## Publicación en GitHub
+
+Para que las imágenes se vean en GitHub, deben estar dentro del repositorio. Este README asume esta ruta:
+
+- `docs/images/chat.png`
+- `docs/images/login.png`
+- `docs/images/register.png`
+
+Asegurate de commitear también esa carpeta.
 
 ## Contacto
 
