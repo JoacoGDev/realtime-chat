@@ -59,7 +59,7 @@ socketHandler(io);
     try {   
         await init(); // Crear tablas si no existen
         server.listen(port, () => {
-            console.log(`Server running at http://localhost:${port}`);
+            console.log(`Server running on port ${port}`);
         });
     } catch (err) {
         console.error("Error inicializando la base de datos:", err);
