@@ -191,5 +191,4 @@ Los scripts disponibles se definen en `package.json`. Habitualmente:
 - Se persisten con un offset incremental para recuperar mensajes tras reconexión.
 ## Contacto
 
-Autor: [@JoacoGDev]  
-Repositorio: https://github.com/JoacoGDev/realtime-chat
+**Autor:** [@JoacoGDev](https://github.com/JoacoGDev)  
