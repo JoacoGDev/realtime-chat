@@ -2,6 +2,22 @@
 
 Aplicación de chat en tiempo real construida con Node.js, Express y Socket.io. Permite que los usuarios se registren, inicien sesión y conversen en un entorno con autenticación JWT y persistencia en base de datos SQL (libSQL/Turso compatible con SQLite).
 
+---
+
+## Demo online
+
+El sistema se encuentra desplegado en Render y puede probarse desde el siguiente enlace:
+
+**https://realtime-chat-a8nh.onrender.com**
+
+> Importante:  
+> Render utiliza un sistema de suspensión automática en el plan gratuito.  
+> Si la aplicación no recibe tráfico durante un tiempo, el servidor se “duerme”.  
+>  
+> En ese caso, al abrir la demo puede tardar **30–60 segundos** en volver a activarse.  
+
+---
+
 ## Capturas de pantalla
 
 ### Chat en tiempo real
