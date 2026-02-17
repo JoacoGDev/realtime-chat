@@ -17,7 +17,12 @@ El sistema se encuentra desplegado en Render y puede probarse desde el siguiente
 > En ese caso, al abrir la demo puede tardar **30–60 segundos** en volver a activarse.  
 
 ---
+## Base de datos en producción
 
+En el entorno de deploy, la aplicación utiliza Turso como base de datos remota basada en libSQL, permitiendo la persistencia de usuarios y mensajes de forma online incluso cuando el servidor se reinicia.
+Esto asegura que la información del chat no dependa del almacenamiento local del contenedor de Render.
+
+---
 ## Capturas de pantalla
 
 ### Chat en tiempo real
@@ -184,18 +189,7 @@ Los scripts disponibles se definen en `package.json`. Habitualmente:
 - El servidor valida el token al conectar.
 - Los mensajes se envían y reciben en tiempo real.
 - Se persisten con un offset incremental para recuperar mensajes tras reconexión.
-
-## Publicación en GitHub
-
-Para que las imágenes se vean en GitHub, deben estar dentro del repositorio. Este README asume esta ruta:
-
-- `docs/images/chat.png`
-- `docs/images/login.png`
-- `docs/images/register.png`
-
-Asegurate de commitear también esa carpeta.
-
 ## Contacto
 
-Autor: JoacoGDev  
+Autor: [@JoacoGDev]  
 Repositorio: https://github.com/JoacoGDev/realtime-chat
