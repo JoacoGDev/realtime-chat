@@ -1,43 +1,41 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat en Tiempo Real</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-</head> 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat en Tiempo Real</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
 <body>
-    <div class="connection-status disconnected" id="connectionStatus">
-        Desconectado
+  <div class="connection-status disconnected" id="connectionStatus">
+    Desconectado
+  </div>
+
+  <h1>Chat en Tiempo Real</h1>
+
+  <section id="chat">
+    <div class="chat-header">
+      <button id="logoutBtn" type="button">Cerrar sesión</button>
     </div>
-    
-    <h1>Chat en Tiempo Real</h1>
-    
-    <section id="chat">
-        <div id="messages">
-            <!-- Los mensajes se agregarán aquí dinámicamente -->
-        </div>
-        
-        <form id="messageForm">
-            <input 
-                type="text" 
-                id="messageInput" 
-                placeholder="Escribe un mensaje..." 
-                maxlength="500"
-                autocomplete="off"
-                required
-            >
-            <button type="submit" id="sendBtn">
-                Enviar
-            </button>
-        </form>
-    </section>
 
-    <button id="logoutBtn">
-        Cerrar Sesión
-    </button>
+    <div id="messages">
+   
+    </div>
 
-    <script type="module" src="js/chat.js"></script>
+    <form id="messageForm">
+      <input
+        type="text"
+        id="messageInput"
+        placeholder="Escribe un mensaje..."
+        maxlength="500"
+        autocomplete="off"
+        required
+      />
+      <button type="submit" id="sendBtn">Enviar</button>
+    </form>
+  </section>
+
+  <script type="module" src="js/chat.js"></script>
 </body>
 </html>
